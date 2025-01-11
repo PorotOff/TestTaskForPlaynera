@@ -14,7 +14,7 @@ public class GameBootstrap : MonoBehaviour
     private void Awake()
     {
         // Camera scrolling settings
-        cameraScrolling.Initialize(cameraConfig.scrollingSpeed);
+        cameraScrolling.Initialize(cameraConfig.scrollingSpeed, cameraConfig.targetMoveWithinObject);
         LeftDragArea.Initialize(leftDragAreaConfig, cameraScrolling);
         rightDragArea.Initialize(rightDragAreaConfig, cameraScrolling);
     }

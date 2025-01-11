@@ -16,13 +16,11 @@ public class FloorPlacement : MonoBehaviour
 
         dragAndDrop.draggableObjectState = new OnGroundState(objectRigidbody, objectCollider);
         dragAndDrop.OnEnter();
-
-        Debug.Log($"Сейчас состояние объекта должно быть OnGroundState: {dragAndDrop.draggableObjectState.GetType().Name}");
     }
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (dragAndDrop == null) throw new Exception("Не назначен DragAndDrop объект");
+        if (dragAndDrop == null) Debug.Log("Пока ещё назначен DragAndDrop объект");
 
         dragAndDrop.OnEnter();
     }

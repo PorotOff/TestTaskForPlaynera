@@ -3,14 +3,12 @@ using UnityEngine.EventSystems;
 
 public class DragArea : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    private DragAreaConfig dragAreaConfig;
     private CameraScrolling cameraScrolling;
 
     private bool isCoursorAbove = false;
 
-    public void Initialize(DragAreaConfig dragAreaConfig, CameraScrolling cameraScrolling)
+    public void Initialize(CameraScrolling cameraScrolling)
     {
-        this.dragAreaConfig = dragAreaConfig;
         this.cameraScrolling = cameraScrolling;
     }
 
@@ -28,7 +26,7 @@ public class DragArea : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         if (isCoursorAbove)
         {
-            cameraScrolling.ScrollToward(dragAreaConfig.cameraScrollingXOffset);
+            cameraScrolling.ScrollToward();
         }
     }
 }

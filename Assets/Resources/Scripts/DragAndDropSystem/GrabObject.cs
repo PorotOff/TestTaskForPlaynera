@@ -5,9 +5,9 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(Rigidbody2D), typeof(DragAndDrop))]
 public class GrabObject : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
-    public static event Action<Transform> OnDraggableObjectIsTouched;
+    public static event Action OnDraggableObjectIsTouched;
     public static event Action OnDraggableObjectIsUnTouched;
-    public static event Action<Transform> OnDraggableObjectTouching;
+    public static event Action OnDraggableObjectTouching;
 
     private DragAndDrop dragAndDrop;
     private Rigidbody2D objectRigidbody;
@@ -18,28 +18,21 @@ public class GrabObject : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
         dragAndDrop = GetComponent<DragAndDrop>();
         objectRigidbody = GetComponent<Rigidbody2D>();
         objectCollider = GetComponent<Collider2D>();
-
-        dragAndDrop.draggableObjectState = new OnGroundState(objectRigidbody, objectCollider);
-        dragAndDrop.draggableObjectState.OnExit();
-
-        dragAndDrop.Initialise(transform);
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        dragAndDrop.draggableObjectState = new OnDragState(objectRigidbody, objectCollider);
+        dragAndDrop.draggableObjectState = new OnDragState(objectRigidbody, objectCollider, transform);
         dragAndDrop.OnEnter();
 
-        Debug.Log($"Произошёл клик, теперь состояние объекта {dragAndDrop.draggableObjectState.GetType().Name}");
-
-        OnDraggableObjectIsTouched?.Invoke(transform);
+        OnDraggableObjectIsTouched?.Invoke();
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        dragAndDrop.DragForCoursor();
+        dragAndDrop.OnStay();
 
-        OnDraggableObjectTouching?.Invoke(transform);
+        OnDraggableObjectTouching?.Invoke();
     }
 
     public void OnPointerUp(PointerEventData eventData)

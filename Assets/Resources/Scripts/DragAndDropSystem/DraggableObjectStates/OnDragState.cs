@@ -1,8 +1,14 @@
 using UnityEngine;
 
-public class OnDragState : DraggableObjectState
+public class OnDragState : OnGroundState
 {
-    public OnDragState(Rigidbody2D objectRigidbody, Collider2D objectCollider) : base(objectRigidbody, objectCollider) { }
+    protected Transform currentTransform;
+
+    public OnDragState(Rigidbody2D objectRigidbody, Collider2D objectCollider, Transform currentTransform)
+        : base(objectRigidbody, objectCollider)
+    {
+        this.currentTransform = currentTransform;
+    }
 
     public override void OnEnter()
     {
@@ -16,6 +22,9 @@ public class OnDragState : DraggableObjectState
 
     public override void OnStay()
     {
-        base.OnStay();
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 newObjectPosition = new Vector3(mousePosition.x, mousePosition.y, currentTransform.position.z);
+
+        currentTransform.position = newObjectPosition;
     }
 }
