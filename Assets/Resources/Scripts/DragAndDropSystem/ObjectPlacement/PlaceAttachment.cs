@@ -2,26 +2,28 @@ using UnityEngine;
 
 public class PlaceAttachment : BasePlacement
 {
-    private Transform targetPlace;
-    private Transform objectTransform;
+    protected Transform targetPlace;
 
     private void Awake()
     {
         targetPlace = transform;
     }
 
-    protected override void OnStay(GameObject dragAndDropGameObject)
+    protected override void OnEnter(GameObject dragAndDropGameObject)
     {
-        base.OnStay(dragAndDropGameObject);
+        base.OnEnter(dragAndDropGameObject);
 
-        if (objectTransform == null)
-        {
-            objectTransform = dragAndDrop.transform;
+        OnAttachmentPlaceState onAttachmentPlaceState = (OnAttachmentPlaceState)dragAndDrop.draggableObjectState;
+        onAttachmentPlaceState.Attach();
+    }
 
-            dragAndDrop.draggableObjectState = new OnAttachmentPlaceState(objectRigidbody, objectCollider, targetPlace, objectTransform);
-            dragAndDrop.OnEnter();
+    protected override void SetState()
+    {
+        dragAndDrop.draggableObjectState = new OnAttachmentPlaceState(objectRigidbody, objectCollider, objectTransform, targetPlace);
+    }
 
-            Debug.Log("Назначен OnAttachmentPlaceState");
-        }
+    protected override bool IsCurrentStateValid()
+    {
+        return dragAndDrop.draggableObjectState.GetType() == typeof(OnGroundState);
     }
 }

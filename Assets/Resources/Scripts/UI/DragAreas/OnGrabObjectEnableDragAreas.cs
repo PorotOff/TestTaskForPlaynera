@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class OnGrabObjectEnableDragAreas : MonoBehaviour
 {
-    private List<DragArea> dragAreas = new List<DragArea>();
+    private List<ScrollArea> dragAreas = new List<ScrollArea>();
 
     private void Awake()
     {
-        dragAreas = GetComponentsInChildren<DragArea>().ToList();
+        dragAreas = GetComponentsInChildren<ScrollArea>().ToList();
 
         DisableAll();
     }

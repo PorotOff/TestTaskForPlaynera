@@ -3,19 +3,21 @@ using UnityEngine;
 public class GameBootstrap : MonoBehaviour
 {
     [Header("Camera scrolling settings")]
-    [SerializeField] private CameraScrolling cameraScrolling;
+    [SerializeField] private ScrollArea scrollArea;
     [SerializeField] private CameraConfig cameraConfig;
+    [SerializeField] private Transform targetMoveWithinObject;
 
-    [SerializeField] private DragArea LeftDragArea;
-    [SerializeField] private DragAreaConfig leftDragAreaConfig;
-    [SerializeField] private DragArea rightDragArea;
-    [SerializeField] private DragAreaConfig rightDragAreaConfig;
+    [SerializeField] private CameraScrolling cameraScrolling;
+    [SerializeField] private ScrollAreaConfig scrollAreaConfig;
 
     private void Awake()
     {
+        // General settings
+        Application.targetFrameRate = 60;
+
         // Camera scrolling settings
-        cameraScrolling.Initialize(cameraConfig.scrollingSpeed, cameraConfig.targetMoveWithinObject);
-        LeftDragArea.Initialize(leftDragAreaConfig, cameraScrolling);
-        rightDragArea.Initialize(rightDragAreaConfig, cameraScrolling);
+
+        cameraScrolling.Initialise(cameraConfig.scrollingSpeed, targetMoveWithinObject);
+        scrollArea.Initialise(scrollAreaConfig.areaWidth);
     }
 }

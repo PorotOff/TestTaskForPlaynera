@@ -4,50 +4,49 @@ public class CameraScrolling : MonoBehaviour
 {
     private Camera mainCamera;
 
-    private float speed;
+    private float scrollingSpeed;
+
+    private Bounds targetBounds;
     private float cameraHalfWidth;
-    private float cameraHalfHeight;
-    
-    private Bounds targetMoveWithinObjectBounds;
 
-    public void Initialize(float speed, Transform targetMoveWithinObject)
+    private Vector3 targetPosition;
+
+    public void Initialise(float scrollingSpeed, Transform targetMoveWithinObject)
     {
-        this.speed = speed;
-        
         mainCamera = Camera.main;
+
+        this.scrollingSpeed = scrollingSpeed;
+
+        targetBounds = targetMoveWithinObject.GetComponent<Renderer>().bounds;
         
-        cameraHalfHeight = mainCamera.orthographicSize;
-        cameraHalfWidth = cameraHalfHeight * mainCamera.aspect;      
-        
-        targetMoveWithinObjectBounds = targetMoveWithinObject.GetComponent<Renderer>().bounds;
+        float cameraHalfHeight = mainCamera.orthographicSize;
+        cameraHalfWidth = cameraHalfHeight * mainCamera.aspect;
+
+        targetPosition = transform.position;
     }
 
-    public void ScrollToLeft()
+    private void Update()
     {
-        float newX = targetMoveWithinObjectBounds.min.x + cameraHalfWidth;
-        
-        newX = Mathf.Clamp(newX, targetMoveWithinObjectBounds.min.x + cameraHalfWidth, targetMoveWithinObjectBounds.max.x - cameraHalfWidth);
-        
-        Vector3 newPosition = new Vector3(newX, mainCamera.transform.position.y, mainCamera.transform.position.z);
-        mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, newPosition, speed * Time.deltaTime);
+        targetPosition.x = Mathf.Clamp(
+            targetPosition.x,
+            targetBounds.min.x + cameraHalfWidth,
+            targetBounds.max.x - cameraHalfWidth
+        );
+
+        transform.position = Vector3.Lerp(
+            transform.position,
+            targetPosition,
+            Time.deltaTime * scrollingSpeed
+        );
     }
 
-    public void ScrollToRight()
+    public void ScrollLeft()
     {
-        float newX = targetMoveWithinObjectBounds.max.x - cameraHalfWidth;
-        
-        newX = Mathf.Clamp(newX, targetMoveWithinObjectBounds.min.x + cameraHalfWidth, targetMoveWithinObjectBounds.max.x - cameraHalfWidth);
-        
-        Vector3 newPosition = new Vector3(newX, mainCamera.transform.position.y, mainCamera.transform.position.z);
-        mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, newPosition, speed * Time.deltaTime);
+        targetPosition += Vector3.left * scrollingSpeed * Time.deltaTime;
     }
 
-    // private void LateUpdate()
-    // {
-    //     Vector3 cameraPosition = mainCamera.transform.position;
-
-    //     cameraPosition.x = Mathf.Clamp(cameraPosition.x, objectMinX + cameraHalfWidth, objectMaxX - cameraHalfWidth);
-
-    //     mainCamera.transform.position = cameraPosition;
-    // }
+    public void ScrollRight()
+    {
+        targetPosition += Vector3.right * scrollingSpeed * Time.deltaTime;
+    }
 }

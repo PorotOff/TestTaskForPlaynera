@@ -3,11 +3,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(DragAndDrop))]
-public class GrabObject : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
+public class GrabObject : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     public static event Action OnDraggableObjectIsTouched;
     public static event Action OnDraggableObjectIsUnTouched;
     public static event Action OnDraggableObjectTouching;
+    private bool isObjectTouching = false;
 
     private DragAndDrop dragAndDrop;
     private Rigidbody2D objectRigidbody;
@@ -26,19 +27,25 @@ public class GrabObject : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
         dragAndDrop.OnEnter();
 
         OnDraggableObjectIsTouched?.Invoke();
-    }
 
-    public void OnDrag(PointerEventData eventData)
-    {
-        dragAndDrop.OnStay();
-
-        OnDraggableObjectTouching?.Invoke();
+        isObjectTouching = true;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        isObjectTouching = false;
+
         dragAndDrop.OnExit();
 
-        OnDraggableObjectIsUnTouched?.Invoke();  
+        OnDraggableObjectIsUnTouched?.Invoke();
+    }
+
+    private void Update()
+    {
+        if (isObjectTouching)
+        {
+            dragAndDrop.OnStay();
+            OnDraggableObjectTouching?.Invoke();
+        }
     }
 }

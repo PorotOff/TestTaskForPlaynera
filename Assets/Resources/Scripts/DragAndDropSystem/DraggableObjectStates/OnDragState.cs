@@ -1,30 +1,39 @@
 using UnityEngine;
 
-public class OnDragState : OnGroundState
+public class OnDragState : DraggableObjectState
 {
-    protected Transform currentTransform;
+    protected Rigidbody2D objectRigidbody;
+    protected Collider2D objectCollider;
+    protected Transform objectTransform;
 
-    public OnDragState(Rigidbody2D objectRigidbody, Collider2D objectCollider, Transform currentTransform)
-        : base(objectRigidbody, objectCollider)
+    public OnDragState(Rigidbody2D objectRigidbody, Collider2D objectCollider, Transform objectTransform)
     {
-        this.currentTransform = currentTransform;
+        this.objectRigidbody = objectRigidbody;
+        this.objectCollider = objectCollider;
+        this.objectTransform = objectTransform;
+
+        objectRigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
+        objectRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX;
+
+        objectCollider.isTrigger = true;
     }
 
     public override void OnEnter()
     {
-        base.OnEnter();
+        objectRigidbody.gravityScale = 0;
+        objectRigidbody.linearVelocity = Vector3.zero;
     }
 
     public override void OnExit()
     {
-        base.OnExit();
+        objectRigidbody.gravityScale = 1;
     }
 
     public override void OnStay()
     {
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector3 newObjectPosition = new Vector3(mousePosition.x, mousePosition.y, currentTransform.position.z);
+        Vector3 newObjectPosition = new Vector3(mousePosition.x, mousePosition.y, objectTransform.position.z);
 
-        currentTransform.position = newObjectPosition;
+        objectTransform.position = newObjectPosition;
     }
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class DragAndDrop : MonoBehaviour
 {
-    public DraggableObjectState draggableObjectState { private get; set; }
+    public DraggableObjectState draggableObjectState { get; set; }
 
     public void OnEnter()
     {

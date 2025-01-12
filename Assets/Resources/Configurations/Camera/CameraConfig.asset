@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8faead7c71f4cf342b5a9fbeb4dd8e8d, type: 3}
   m_Name: CameraConfig
   m_EditorClassIdentifier: 
-  <scrollingSpeed>k__BackingField: 0.03
+  <scrollingSpeed>k__BackingField: 5
