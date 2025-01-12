@@ -3,9 +3,9 @@ using UnityEngine;
 public class ScrollArea : MonoBehaviour
 {
     private CameraScrolling cameraScrolling;
-    private float screenWidth;
+    private float screenWidth; // Ширина экрана в пикселях.
 
-    private float areaWidth;
+    private float areaWidth; // Ширина активной зоны скролла.
 
     public void Initialise(float areaWidth)
     {
@@ -22,15 +22,19 @@ public class ScrollArea : MonoBehaviour
 
     private void Scroll()
     {
+        // Получаем текущую позицию мыши на экране.
         Vector3 mousePosition = Input.mousePosition;
 
+        // Проверяем наличие ввода (тап или нажатие мыши) перед проверкой зон.
         if (Input.touchCount > 0 || Input.GetMouseButton(0))
         {
+            // Проверяем, находится ли мышь в левой зоне экрана.
             if (IsMouseInLeftArea(mousePosition))
             {
                 cameraScrolling.ScrollLeft();
             }
 
+            // Проверяем, находится ли мышь в правой зоне экрана.
             if (IsMouseInRightArea(mousePosition))
             {
                 cameraScrolling.ScrollRight();
@@ -40,15 +44,13 @@ public class ScrollArea : MonoBehaviour
 
     private bool IsMouseInLeftArea(Vector3 mousePosition)
     {
-        Debug.Log("Мышка в левой зоне");
-
+        // Проверяем, находится ли мышь в левой активной зоне.
         return mousePosition.x <= areaWidth;
     }
 
     private bool IsMouseInRightArea(Vector3 mousePosition)
     {
-        Debug.Log("Мышка в правой зоне");
-
+        // Проверяем, находится ли мышь в правой активной зоне.
         return mousePosition.x >= screenWidth - areaWidth;
     }
 }

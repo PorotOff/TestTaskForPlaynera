@@ -1,13 +1,9 @@
-using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(DragAndDrop))]
 public class GrabObject : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    public static event Action OnDraggableObjectIsTouched;
-    public static event Action OnDraggableObjectIsUnTouched;
-    public static event Action OnDraggableObjectTouching;
     private bool isObjectTouching = false;
 
     private DragAndDrop dragAndDrop;
@@ -16,6 +12,7 @@ public class GrabObject : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private void Awake()
     {
+        // Получаем компоненты, чтобы управлять поведением объекта.
         dragAndDrop = GetComponent<DragAndDrop>();
         objectRigidbody = GetComponent<Rigidbody2D>();
         objectCollider = GetComponent<Collider2D>();
@@ -23,10 +20,9 @@ public class GrabObject : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        // Переводим объект в состояние перетаскивания.
         dragAndDrop.draggableObjectState = new OnDragState(objectRigidbody, objectCollider, transform);
         dragAndDrop.OnEnter();
-
-        OnDraggableObjectIsTouched?.Invoke();
 
         isObjectTouching = true;
     }
@@ -35,17 +31,16 @@ public class GrabObject : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         isObjectTouching = false;
 
+        // Вызываем выход из текущего состояния, завершив перетаскивание.
         dragAndDrop.OnExit();
-
-        OnDraggableObjectIsUnTouched?.Invoke();
     }
 
     private void Update()
     {
         if (isObjectTouching)
         {
+            // Вызываем метод для обновления текущего состояния.
             dragAndDrop.OnStay();
-            OnDraggableObjectTouching?.Invoke();
         }
     }
 }
