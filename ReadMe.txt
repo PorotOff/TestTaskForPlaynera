@@ -1,0 +1,1 @@
+1) Весь код находится в папке Assets\Resources\Scripts
